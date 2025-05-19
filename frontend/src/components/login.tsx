@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLogin } from "../services/auth.service";
 
 function Login() {
   const { login } = useLogin();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -27,6 +29,10 @@ function Login() {
         password: formData.password,
       });
       console.log("Login successful:", response);
+      if (response?.token) {
+        localStorage.setItem("token", response.token);
+        navigate("/");
+      }
     } catch (error) {
       console.error("Login failed:", error);
     }
